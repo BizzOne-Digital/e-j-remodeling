@@ -1,0 +1,71 @@
+@import "tailwindcss";
+
+@theme inline {
+  --color-ink: #040d18;
+  --color-night: #071827;
+  --color-navy: #0b2239;
+  --color-primary: #0078d4;
+  --color-bright: #159dff;
+  --color-royal: #0754b8;
+  --color-mist: #f5f7fa;
+  --color-dark: #101820;
+  --color-muted: #667085;
+  --color-silver: #c5cfda;
+  --color-line: #d7e1eb;
+  --font-serif: var(--font-libre), Georgia, serif;
+  --font-sans: var(--font-inter), system-ui, sans-serif;
+  --font-btn: var(--font-manrope), system-ui, sans-serif;
+  --breakpoint-xs: 400px;
+}
+
+@layer base {
+  * { border-color: var(--color-line); }
+  html { scroll-behavior: smooth; scroll-padding-top: 110px; -webkit-text-size-adjust: 100%; }
+  body { font-family: var(--font-sans); color: var(--color-dark); background: #fff; -webkit-font-smoothing: antialiased; }
+  h1, h2, h3 { text-wrap: balance; overflow-wrap: break-word; }
+  h1, h2 { font-family: var(--font-serif); font-weight: 700; letter-spacing: -0.015em; }
+  button, [role="button"], summary { cursor: pointer; }
+  button:disabled { cursor: not-allowed; }
+  :focus-visible { outline: 3px solid var(--color-bright); outline-offset: 3px; border-radius: 4px; }
+}
+
+@layer utilities {
+  .wrap { width: 100%; max-width: 1400px; margin-inline: auto; padding-inline: clamp(1.1rem, 4vw, 4rem); }
+  .section { padding-block: clamp(4rem, 8vw, 7rem); }
+  .h2 { font-size: clamp(1.7rem, 3.4vw, 2.75rem); line-height: 1.18; }
+  .eyebrow { font-family: var(--font-btn); font-weight: 700; font-size: 0.8rem; letter-spacing: 0.18em; color: var(--color-royal); }
+  .grad { background-image: linear-gradient(135deg, #159dff 0%, #0754b8 100%); }
+  .marble { background: linear-gradient(#fff, transparent 200px), #fff url("/images/marble-texture.webp") center / cover; }
+  .line-l, .line-r { height: 3px; width: clamp(40px, 11vw, 155px); border-radius: 2px; }
+  .line-l { background: linear-gradient(90deg, transparent, var(--color-primary)); }
+  .line-r { background: linear-gradient(90deg, var(--color-primary), transparent); }
+  .card { background: #fff; border: 1px solid var(--color-line); border-radius: 14px; box-shadow: 0 8px 26px -14px rgb(11 34 57 / 0.28); }
+}
+
+@keyframes rise { from { opacity: 0; transform: translateY(22px); } }
+@keyframes drift { from { transform: scale(1); } to { transform: scale(1.05) translateX(-0.8%); } }
+@keyframes draw { from { transform: scaleX(0); } }
+@keyframes fade { from { opacity: 0; } }
+@keyframes settle { from { transform: translateY(8px); } }
+@keyframes zoom-in { from { opacity: 0; transform: scale(0.97); } }
+@keyframes slide-in { from { transform: translateX(100%); } }
+
+@media (prefers-reduced-motion: no-preference) {
+  .rise { animation: rise 0.75s cubic-bezier(0.2, 0.7, 0.2, 1) both; animation-delay: calc(var(--i, 0) * 90ms); }
+  .drift { animation: drift 24s ease-in-out infinite alternate; }
+  .page-in { animation: settle 0.35s ease-out; }
+  .draw { transform-origin: left; animation: draw 0.9s 0.5s cubic-bezier(0.2, 0.7, 0.2, 1) both; }
+  /* Scroll reveals: pure CSS, and simply static where view timelines are unsupported. */
+  @supports (animation-timeline: view()) {
+    .reveal { animation: rise linear both; animation-timeline: view(); animation-range: entry 0% entry min(28%, 160px); }
+    .reveal-line { animation: draw linear both; animation-timeline: view(); animation-range: entry 0% cover 30%; transform-origin: left; }
+    .line-l.reveal-line { transform-origin: right; }
+    .wave { animation: wave-in linear both; animation-timeline: view(); animation-range: entry 0% cover 35%; transform-origin: bottom; }
+  }
+}
+@keyframes wave-in { from { transform: scaleY(0.72); } }
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after { animation: none !important; transition: none !important; }
+}
+
