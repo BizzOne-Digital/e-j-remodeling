@@ -147,9 +147,22 @@ export const defaultFaqs: FaqItem[] = [
 
 export type GalleryItem = {
   title: string; description: string; category: string; kind: "inspiration" | "project";
-  image: string; beforeImage: string; afterImage: string; order: number; published: boolean;
+  image: string; beforeImage: string; afterImage: string; video: string; order: number; published: boolean;
 };
-export const defaultGallery: GalleryItem[] = ([
+/** Genuine E&J work supplied by the client. */
+export const projectGallery: GalleryItem[] = ([
+  ["Walk-in shower with glass enclosure and rain head", "Showers", "shower-05", ""],
+  ["Tiled shower with bench and dark fixtures", "Showers", "shower-04", ""],
+  ["Glass shower with half wall", "Showers", "shower-02", ""],
+  ["Accessible shower with grab bars and fold-down seat", "Showers", "shower-01", ""],
+  ["Wood-look tile shower with niche", "Showers", "shower-03", ""],
+  ["Gray shaker kitchen with granite counters", "Kitchens", "kitchen-03", ""],
+  ["Gray cabinet kitchen with stainless appliances", "Kitchens", "kitchen-01", ""],
+  ["Kitchen cabinetry opening to the dining area", "Kitchens", "kitchen-02", ""],
+  ["Subway tile bathroom walkthrough", "Bathrooms", "bathroom-video-poster", "/videos/bathroom-01.mp4"],
+] as const).map(([title, category, f, video], i) => ({ title, description: "", category, kind: "project", image: `/images/projects/${f}.webp`, beforeImage: "", afterImage: "", video, order: i - 100, published: true }));
+
+const inspiration: GalleryItem[] = ([
   ["Bright kitchen with central island", "Kitchens", "gallery-kitchen-01"],
   ["Freestanding tub and vessel sink", "Bathrooms", "gallery-bathroom-01"],
   ["Kitchen island with globe pendants", "Kitchens", "gallery-kitchen-02"],
@@ -157,7 +170,8 @@ export const defaultGallery: GalleryItem[] = ([
   ["Walk-in shower with double vanity", "Showers", "gallery-shower"],
   ["Marble-look vanity wall", "Bathrooms", "gallery-bathroom-02"],
   ["Light wood floors in an open living area", "Flooring", "gallery-flooring"],
-] as const).map(([title, category, f], order) => ({ title, description: "", category, kind: "inspiration", image: `/images/${f}.webp`, beforeImage: "", afterImage: "", order, published: true }));
+] as const).map(([title, category, f], order) => ({ title, description: "", category, kind: "inspiration", image: `/images/${f}.webp`, beforeImage: "", afterImage: "", video: "", order, published: true }));
+export const defaultGallery: GalleryItem[] = [...projectGallery, ...inspiration];
 
 export const defaultAvailability = {
   weekdays: [0, 1, 2, 3, 4, 5, 6],

@@ -40,7 +40,7 @@ export const FAQ = define<FaqItem>("FAQ", new Schema({ question: req, answer: re
 
 export const GalleryImage = define<GalleryItem>("GalleryImage", new Schema({
   title: req, description: str, category: { ...req, index: true }, kind: { type: String, enum: GALLERY_KINDS, default: "inspiration" },
-  image: str, beforeImage: str, afterImage: str, order: { type: Number, default: 0 }, published: { type: Boolean, default: true },
+  image: str, beforeImage: str, afterImage: str, video: str, order: { type: Number, default: 0 }, published: { type: Boolean, default: true },
 }, opts).index({ published: 1, order: 1 }));
 
 export interface IBooking {

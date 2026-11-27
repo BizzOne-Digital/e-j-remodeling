@@ -5,14 +5,17 @@ import { Button } from "@/components/ui/button";
 import { FinalCta, PageHero } from "@/components/shared/sections";
 import { ServiceIcon } from "@/components/shared/icons";
 import { SmartImage } from "@/components/shared/smart-image";
+import { Gallery } from "@/components/home/gallery";
 import { SERVICE_OPTIONS } from "@/lib/constants";
 import { getSite } from "@/lib/content";
 import { pageMeta } from "@/lib/seo";
 import { cn } from "@/lib/utils";
 
 export const generateMetadata = (): Promise<Metadata> => pageMeta("services", "/services");
+/** Which genuine project photos appear under each service. */
+const WORK: Record<string, string[]> = { showers: ["Showers", "Bathrooms"], cabinets: ["Kitchens", "Cabinets"], floors: ["Flooring"] };
 export default async function ServicesPage() {
-  const { settings, home, services } = await getSite();
+  const { settings, home, services, gallery } = await getSite();
   return (
     <>
       <PageHero {...home.pages.services} crumb="Services" path="/services" />
@@ -20,6 +23,7 @@ export default async function ServicesPage() {
         {services.map((s) => <li key={s.slug}><a href={`#${s.slug}`} className="card flex min-h-12 items-center gap-2.5 px-5 font-semibold hover:border-primary hover:text-royal"><ServiceIcon name={s.icon} size={21} className="text-primary" />{s.title}</a></li>)}
       </ul></nav>
       {services.map((s, i) => {
+        const work = gallery.filter((g) => g.kind === "project" && WORK[s.slug]?.includes(g.category));
         const opt = (SERVICE_OPTIONS as readonly string[]).includes(s.title) ? `service=${s.title}` : "";
         return (
           <section key={s.slug} id={s.slug} aria-labelledby={`${s.slug}-h`} className={cn("section", i % 2 === 1 && "bg-mist")}><div className="wrap grid items-center gap-10 lg:grid-cols-2 lg:gap-16">
@@ -38,7 +42,9 @@ export default async function ServicesPage() {
                 <Button asChild variant="light"><Link href={`/booking?${opt}`}><CalendarDays size={19} aria-hidden />Book Consultation</Link></Button>
               </div>
             </div>
-          </div></section>
+          </div>
+          {work.length ? <div className="wrap mt-12"><h3 className="mb-5 text-xl font-bold">Recent E&amp;J {s.slug === "cabinets" ? "kitchen" : s.title.toLowerCase()} projects</h3><Gallery items={work} filters={false} compact /></div> : null}
+          </section>
         );
       })}
       <FinalCta cta={home.cta} settings={settings} />

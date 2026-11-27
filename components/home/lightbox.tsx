@@ -18,7 +18,7 @@ export default function Lightbox({ items, index, onIndex, onClose, label }: { it
             <div className="min-w-0"><p className="text-sm text-[#8fd0ff]">{label(g)} · {index + 1} of {items.length}</p><Dialog.Title className="truncate font-sans text-lg font-semibold tracking-normal">{g.title}</Dialog.Title></div>
             <Dialog.Close aria-label="Close gallery" className={btn}><X /></Dialog.Close>
           </div>
-          <div key={g.image} className="relative my-4 min-h-0 grow [animation:zoom-in_.3s]"><SmartImage src={g.image} alt={g.title} fill sizes="100vw" className="object-contain" /></div>
+          <div key={g.image + g.video} className="relative my-4 min-h-0 grow [animation:zoom-in_.3s]">{g.video ? <video src={g.video} poster={g.image} controls autoPlay playsInline preload="metadata" className="absolute inset-0 size-full object-contain">Your browser cannot play this video.</video> : <SmartImage src={g.image} alt={g.title} fill sizes="100vw" className="object-contain" />}</div>
           {g.description ? <p className="mx-auto mb-3 max-w-2xl text-center text-silver">{g.description}</p> : null}
           {items.length > 1 ? <div className="flex justify-center gap-4"><button type="button" aria-label="Previous image" className={btn} onClick={() => go(-1)}><ChevronLeft /></button><button type="button" aria-label="Next image" className={btn} onClick={() => go(1)}><ChevronRight /></button></div> : null}
         </Dialog.Content>

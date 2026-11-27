@@ -23,10 +23,12 @@ const m = (x: unknown) => x as Model<never>;
 
 const service = z.object({ title: s(80, 1), slug: z.string().trim().regex(/^[a-z0-9]+(-[a-z0-9]+)*$/, "Use lowercase letters, numbers and hyphens").max(60), shortDescription: s(300, 1), description: s(3000), icon: z.enum(ICON_KEYS), image: imageUrl, benefits: list, options: list, ...common });
 const faq = z.object({ question: s(300, 1), answer: s(3000, 1), ...common });
-const gallery = z.object({ title: s(150, 1), description: s(600), category: s(60, 1), kind: z.enum(GALLERY_KINDS), image: imageUrl, beforeImage: imageUrl, afterImage: imageUrl, ...common });
+const gallery = z.object({ title: s(150, 1), description: s(600), category: s(60, 1), kind: z.enum(GALLERY_KINDS), image: imageUrl, beforeImage: imageUrl, afterImage: imageUrl,
+  video: z.string().max(200).regex(/^(\/videos\/[\w-]+\.(mp4|webm))?$/, "Use a path like /videos/name.mp4").optional().default(""), ...common });
 const checkGallery = (d: Data) => {
   if (!d.image && !(d.beforeImage && d.afterImage)) throw new HttpError(400, "Add an image, or both a before and an after image.");
   if (Boolean(d.beforeImage) !== Boolean(d.afterImage)) throw new HttpError(400, "A comparison needs both a before and an after image.");
+  if (d.video && !d.image) throw new HttpError(400, "Add a cover image for the video.");
   if (d.beforeImage && d.kind !== "project") throw new HttpError(400, "Before-and-after pairs must be genuine: set the type to Completed project.");
   return d;
 };
